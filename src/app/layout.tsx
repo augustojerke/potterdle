@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "@/components/providers/AuthProvider";
+import AutoLogout from "@/components/common/AutoLogout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +29,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
-        {children}
+        <h1 className="absolute top-3 left-1/2 -translate-x-1/2 font-HarryFont text-[3rem] text-white py-5 text-center">
+          Potterdle
+        </h1>
+
+        <AuthProvider>
+          <AutoLogout />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
