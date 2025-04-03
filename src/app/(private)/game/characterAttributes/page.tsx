@@ -2,27 +2,32 @@
 import { SelectCharacters } from "@/components/common/SelectCharacters";
 import { Button } from "@/components/ui/button";
 import charactersData from "@/app/data/characters.json";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const characters: Character[] = charactersData;
 
 export default function CharacterAttributes() {
-  const randomIndex = Math.floor(Math.random() * characters.length);
-  const randomCharacter = characters[randomIndex];
-
+  const [randomCharacter, setRandomCharacter] = useState<Character | null>(
+    null
+  );
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(
     null
   );
   const [guesses, setGuesses] = useState<Character[]>([]);
 
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    setRandomCharacter(characters[randomIndex]);
+  }, []);
+
   const handleGuess = () => {
-    if (!selectedCharacterId) return;
+    if (!selectedCharacterId || !randomCharacter) return;
 
     const guessedCharacter = characters.find(
       (char) => char.id === selectedCharacterId
     );
     if (guessedCharacter) {
-      setGuesses((prevGuesses) => [guessedCharacter, ...prevGuesses]);
+      setGuesses((prevGuesses) => [{ ...guessedCharacter }, ...prevGuesses]);
     }
   };
 
@@ -92,7 +97,7 @@ export default function CharacterAttributes() {
                   {attributes.map(({ key }) => {
                     const isCorrect =
                       guess[key as keyof Character] ===
-                      randomCharacter[key as keyof Character];
+                      randomCharacter?.[key as keyof Character];
                     return (
                       <td
                         key={key}
