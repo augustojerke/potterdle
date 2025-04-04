@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address."),
@@ -87,7 +88,8 @@ export function LoginForm({ ...props }) {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input placeholder="**********"
+                        type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -100,8 +102,13 @@ export function LoginForm({ ...props }) {
                 loading={form.formState.isSubmitting}
                 disabled={form.formState.isSubmitting}
               >
-                Login
+                Sign in
               </Button>
+              <Link href="/register" passHref>
+                <Button variant="outline" className="w-full mt-2" type="button">
+                  Create an account
+                </Button>
+              </Link>
             </form>
           </Form>
         </CardContent>
