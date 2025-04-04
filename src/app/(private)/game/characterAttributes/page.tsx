@@ -124,7 +124,7 @@ export default function CharacterAttributes() {
 
       {gameIsFinished && (
         <div className="flex justify-center items-center mt-8">
-          <Button onClick={() => router.push("/game/charactherImage")}>
+          <Button onClick={() => router.push("/game/characterImage")}>
             <ArrowRight />
             Next Game
           </Button>
@@ -159,7 +159,7 @@ export default function CharacterAttributes() {
             </div>
           )}
           <DialogFooter>
-            <Button onClick={() => router.push("/game/charactherImage")}>
+            <Button onClick={() => router.push("/game/characterImage")}>
               <ArrowRight />
               Next Game
             </Button>

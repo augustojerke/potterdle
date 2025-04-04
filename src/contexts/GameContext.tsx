@@ -10,6 +10,9 @@ interface GameContextData {
 
   game2Character: Character | undefined;
   setGame2Character: (value: Character) => void;
+
+  game3Spell: Spell | undefined;
+  setGame3Spell: (value: Spell) => void;
 }
 
 const GameContext = createContext<GameContextData | undefined>(undefined);
@@ -21,6 +24,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const [game1Character, setGame1Character] = useState<Character | undefined>();
   const [game2Character, setGame2Character] = useState<Character | undefined>();
+  const [game3Spell, setGame3Spell] = useState<Spell | undefined>();
   return (
     <GameContext.Provider
       value={{
@@ -32,6 +36,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
         game2Character,
         setGame2Character,
+
+        game3Spell,
+        setGame3Spell,
       }}
     >
       {children}

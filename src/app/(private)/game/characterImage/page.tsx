@@ -133,7 +133,7 @@ export default function CharacterImage() {
           <p className="text-green-600 text-center mb-4">
             Congratulations, you got it right wizard!
           </p>
-          <Button onClick={() => router.push("/game/charactherImage")}>
+          <Button onClick={() => router.push("/game/spells")}>
             <ArrowRight className="mr-2" />
             Next Game
           </Button>
@@ -172,7 +172,7 @@ export default function CharacterImage() {
             )}
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsDialogOpen(false)}>
+            <Button onClick={() => router.push("/game/spells")}>
               <ArrowRight />
               Next Game
             </Button>
