@@ -23,6 +23,7 @@ export default function CharacterAttributes() {
   );
   const [guesses, setGuesses] = useState<Character[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * characters.length);
@@ -30,6 +31,7 @@ export default function CharacterAttributes() {
   }, []);
 
   const handleGuess = () => {
+    setAttempts((prev) => prev + 1);
     if (!selectedCharacterId || !randomCharacter) return;
 
     const guessedCharacter = characters.find(
@@ -122,7 +124,7 @@ export default function CharacterAttributes() {
                     return (
                       <td
                         key={key}
-                        className={`border border-gray-500 px-3 py-2 font-bold w-32 ${
+                        className={`border border-gray-500 px-3 py-2 w-32 ${
                           isCorrect ? "bg-green-500" : "bg-red-500"
                         }`}
                       >
@@ -141,10 +143,12 @@ export default function CharacterAttributes() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Congratulations!</DialogTitle>
-            <DialogDescription>
-              You guessed <b>{randomCharacter?.name}</b> correctly!
+            <DialogDescription className="text-xl">
+              You guessed <b>{randomCharacter?.name}</b> correctly in {attempts}{" "}
+              attempts!
             </DialogDescription>
           </DialogHeader>
+          <div></div>
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
           </DialogFooter>

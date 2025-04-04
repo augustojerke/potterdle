@@ -14,4 +14,44 @@ model User {
   password String
   house    String
   points   Int    @default(0)
+
+  challengesAsChallenger Challenge[] @relation("ChallengerRelation")
+  challengesAsChallenged Challenge[] @relation("ChallengedRelation")
+  UserGame               UserGame[]
+  Game                   Game[]
+}
+
+model Challenge {
+  id                 String  @id @default(uuid())
+  challenger_user_id String
+  challenged_user_id String
+  game_id            String
+  is_finished        Boolean @default(false)
+  winner_user_id     String?
+
+  game            Game @relation("ChallengeGame", fields: [game_id], references: [id])
+  challenger_user User @relation("ChallengerRelation", fields: [challenger_user_id], references: [id])
+  challenged_user User @relation("ChallengedRelation", fields: [challenged_user_id], references: [id])
+}
+
+model Game {
+  id                  String @id @default(uuid())
+  game_1_character_id String
+  game_2_character_id String
+  game_3_character_id String
+
+  Challenge Challenge[] @relation("ChallengeGame")
+  UserGame  UserGame[]
+  User      User?       @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model UserGame {
+  id       String @id @default(uuid())
+  user_id  String
+  game_id  String
+  attempts Int
+
+  user User @relation(fields: [user_id], references: [id])
+  game Game @relation(fields: [game_id], references: [id])
 }
