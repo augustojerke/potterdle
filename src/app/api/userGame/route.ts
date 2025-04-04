@@ -6,13 +6,13 @@ import { getServerSession } from "next-auth";
 
 export async function GET(req: NextRequest, { params }) {
   const session = await getServerSession(authOptions);
-  const games = await prisma.game.findMany({
+  const userGames = await prisma.userGame.findMany({
     where: {
-      userId: session?.user.id,
+      user_id: session?.user.id,
     },
   });
 
-  return NextResponse.json(games);
+  return NextResponse.json(userGames);
 }
 
 export async function POST(req: NextRequest) {
@@ -30,14 +30,13 @@ export async function POST(req: NextRequest) {
   }
   console.log(session);
 
-  const game = await prisma.game.create({
+  const userGame = await prisma.userGame.create({
     data: {
-      game_1_character_id: data.game_1_character_id,
-      game_2_character_id: data.game_2_character_id,
-      game_3_character_id: data.game_3_character_id,
-      userId: session?.user.id,
+      user_id: session?.user.id,
+      game_id: data.game_id,
+      attempts: data.attempts,
     },
   });
 
-  return NextResponse.json(game);
+  return NextResponse.json(userGame);
 }
