@@ -1,6 +1,14 @@
 "use client";
 import { SelectCharacters } from "@/components/common/SelectCharacters";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import charactersData from "@/app/data/characters.json";
 import { useState, useEffect } from "react";
 
@@ -14,6 +22,7 @@ export default function CharacterAttributes() {
     null
   );
   const [guesses, setGuesses] = useState<Character[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * characters.length);
@@ -28,6 +37,17 @@ export default function CharacterAttributes() {
     );
     if (guessedCharacter) {
       setGuesses((prevGuesses) => [{ ...guessedCharacter }, ...prevGuesses]);
+
+      const allAttributesCorrect = attributes.every(({ key }) => {
+        return (
+          guessedCharacter[key as keyof Character] ===
+          randomCharacter[key as keyof Character]
+        );
+      });
+
+      if (allAttributesCorrect) {
+        setIsDialogOpen(true);
+      }
     }
   };
 
@@ -35,6 +55,7 @@ export default function CharacterAttributes() {
     { label: "Species", key: "species" },
     { label: "Gender", key: "gender" },
     { label: "House", key: "house" },
+    { label: "Ancestry", key: "ancestry" },
     { label: "Year of Birth", key: "yearOfBirth" },
     { label: "Wizard", key: "wizard" },
     { label: "Hair Color", key: "hairColour" },
@@ -115,6 +136,20 @@ export default function CharacterAttributes() {
           </table>
         </div>
       )}
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Congratulations!</DialogTitle>
+            <DialogDescription>
+              You guessed <b>{randomCharacter?.name}</b> correctly!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
