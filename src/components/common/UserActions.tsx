@@ -6,6 +6,13 @@ import { useRouter } from "next/navigation";
 export function UserActions() {
   const router = useRouter();
 
+  function handleSignOut() {
+    if (typeof window !== "undefined") {
+      localStorage.clear();
+    }
+    signOut({ callbackUrl: "/login" });
+  }
+
   return (
     <div className="flex-col gap-4">
       <button
@@ -16,7 +23,7 @@ export function UserActions() {
         Play
       </button>
       <button
-        onClick={() => signOut({ callbackUrl: "/login" })}
+        onClick={() => handleSignOut()}
         className="w-30 flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
       >
         <LogOut size={20} />

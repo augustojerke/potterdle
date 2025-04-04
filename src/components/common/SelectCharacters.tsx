@@ -19,9 +19,13 @@ const characters: Character[] = charactersData;
 
 interface SelectCharactersProps {
   onChange: (characterId: string) => void;
+  showImage?: boolean;
 }
 
-export function SelectCharacters({ onChange }: SelectCharactersProps) {
+export function SelectCharacters({
+  onChange,
+  showImage = true,
+}: SelectCharactersProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -29,20 +33,23 @@ export function SelectCharacters({ onChange }: SelectCharactersProps) {
   const filteredCharacters = characters.filter((char) =>
     char.name.toLowerCase().includes(query.toLowerCase())
   );
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full h-20 justify-between px-6 py-4 text-lg"
+          className="w-1/2 h-18 justify-between px-6 py-4 text-lg"
         >
           {selected ? (
             <div className="flex items-center gap-4">
-              <img
-                src={characters.find((opt) => opt.id === selected)?.image}
-                alt="Character"
-                className="w-12 h-12 rounded-full"
-              />
+              {showImage && (
+                <img
+                  src={characters.find((opt) => opt.id === selected)?.image}
+                  alt="Character"
+                  className="w-12 h-12 rounded-full"
+                />
+              )}
               {characters.find((opt) => opt.id === selected)?.name}
             </div>
           ) : (
@@ -75,11 +82,13 @@ export function SelectCharacters({ onChange }: SelectCharactersProps) {
                     selected === option.id ? "opacity-100" : "opacity-0"
                   }`}
                 />
-                <img
-                  src={option.image}
-                  alt={option.name}
-                  className="w-14 h-14 rounded-full"
-                />
+                {showImage && (
+                  <img
+                    src={option.image}
+                    alt={option.name}
+                    className="w-14 h-14 rounded-full"
+                  />
+                )}
                 {option.name}
               </CommandItem>
             ))}
