@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-async function getGames() {
+export async function getGames() {
   const res = await fetch("/api/game");
   if (!res.ok) {
     throw new Error("Erro na busca de games");
