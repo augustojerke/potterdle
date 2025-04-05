@@ -1,10 +1,14 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GamesList } from "./GamesList";
 
 export function ChallengeTabs() {
   return (
-    <Tabs defaultValue="completed" className="w-full">
+    <Tabs defaultValue="games" className="w-full">
       <TabsList className="w-full flex">
+        <TabsTrigger value="games" className="flex-1 text-center">
+          Games
+        </TabsTrigger>
         <TabsTrigger value="completed" className="flex-1 text-center">
           Challenges Completed
         </TabsTrigger>
@@ -15,6 +19,11 @@ export function ChallengeTabs() {
           Challenges Received
         </TabsTrigger>
       </TabsList>
+      <TabsContent value="games">
+        <div className="w-full">
+          <GamesList />
+        </div>
+      </TabsContent>
       <TabsContent value="completed">
         <div className="w-full"></div>
       </TabsContent>

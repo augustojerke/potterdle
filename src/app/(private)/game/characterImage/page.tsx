@@ -1,6 +1,13 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
+
+import { useGame } from "@/contexts/GameContext";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SelectCharacters } from "@/components/common/SelectCharacters";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,22 +17,14 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+
 import charactersData from "@/app/data/characters.json";
-import { ArrowRight } from "lucide-react";
-import { useGame } from "@/contexts/GameContext";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
-import { useRouter } from "next/navigation";
 
 const characters: Character[] = charactersData;
 
 export default function CharacterImage() {
   const router = useRouter();
-
-  const [componentMouted, setComponentMouted] = useState(false);
-  useEffect(() => {
-    setComponentMouted(true);
-  }, []);
+  const [componentMounted, setComponentMounted] = useState(false);
 
   const { incrementAttempts, setGame2Character } = useGame();
 
@@ -47,6 +46,10 @@ export default function CharacterImage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
+    setComponentMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!randomCharacter) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       setRandomCharacter(characters[randomIndex]);
@@ -65,8 +68,10 @@ export default function CharacterImage() {
     const guessedCharacter = characters.find(
       (char) => char.id === selectedCharacterId
     );
+
     if (guessedCharacter) {
       setAttempts(attempts + 1);
+
       if (guessedCharacter.id === randomCharacter.id) {
         setGameIsFinished(true);
         setErrorMessage("");
@@ -83,20 +88,23 @@ export default function CharacterImage() {
     if (blurValue === 0 && !gameIsFinished) {
       setGameIsFinished(true);
       setErrorMessage("You lost! The character was " + randomCharacter?.name);
-      if (randomCharacter != null) {
+
+      if (randomCharacter) {
         setGame2Character(randomCharacter);
       }
+
       incrementAttempts(10);
       setIsDialogOpen(true);
     }
   }, [blurValue, gameIsFinished, randomCharacter]);
 
-  if (!componentMouted)
+  if (!componentMounted) {
     return (
       <div className="flex items-center justify-center py-10">
         <LoadingSpinner color="text-secundary" />
       </div>
     );
+  }
 
   return (
     <div className="px-10 pb-7">

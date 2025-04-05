@@ -1,10 +1,9 @@
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET(req: NextRequest, { params }: any) {
   const session = await getServerSession(authOptions);
   const games = await prisma.game.findMany({
     where: {
@@ -28,13 +27,13 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-  console.log(session);
 
   const game = await prisma.game.create({
     data: {
       game_1_character_id: data.game_1_character_id,
       game_2_character_id: data.game_2_character_id,
-      game_3_character_id: data.game_3_character_id,
+      game_3_spell_id: data.game_3_spell_id,
+      attempts: data.attempts,
       userId: session?.user.id,
     },
   });

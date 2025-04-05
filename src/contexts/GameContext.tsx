@@ -13,18 +13,28 @@ interface GameContextData {
 
   game3Spell: Spell | undefined;
   setGame3Spell: (value: Spell) => void;
+
+  resetGame: () => void;
 }
 
 const GameContext = createContext<GameContextData | undefined>(undefined);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [attempts, setAttempts] = useState(0);
-  const incrementAttempts = (value: number) =>
-    setAttempts((prev) => prev + value);
-
   const [game1Character, setGame1Character] = useState<Character | undefined>();
   const [game2Character, setGame2Character] = useState<Character | undefined>();
   const [game3Spell, setGame3Spell] = useState<Spell | undefined>();
+
+  const incrementAttempts = (value: number) =>
+    setAttempts((prev) => prev + value);
+
+  const resetGame = () => {
+    setAttempts(0);
+    setGame1Character(undefined);
+    setGame2Character(undefined);
+    setGame3Spell(undefined);
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -39,6 +49,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
         game3Spell,
         setGame3Spell,
+
+        resetGame,
       }}
     >
       {children}

@@ -22,11 +22,7 @@ const characters: Character[] = charactersData;
 
 export default function CharacterAttributes() {
   const router = useRouter();
-
   const [componentMouted, setComponentMouted] = useState(false);
-  useEffect(() => {
-    setComponentMouted(true);
-  }, []);
 
   const { incrementAttempts, setGame1Character } = useGame();
 
@@ -42,6 +38,10 @@ export default function CharacterAttributes() {
     false
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    setComponentMouted(true);
+  }, []);
 
   useEffect(() => {
     if (!randomCharacter) {

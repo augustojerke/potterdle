@@ -10,24 +10,28 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import spellsData from "@/app/data/spells.json";
-import { ArrowRight } from "lucide-react";
+import { Flag, Wand } from "lucide-react";
 import { useGame } from "@/contexts/GameContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { SelectSpells } from "@/components/common/SelectSpells";
+import { useCreateGame } from "@/app/actions/game-actions";
 
 const spells: Spell[] = spellsData;
 
 export default function Spells() {
   const router = useRouter();
 
+  const { mutateAsync: create, isPending: isLoadingCreateGame } =
+    useCreateGame();
+
   const [componentMouted, setComponentMouted] = useState(false);
   useEffect(() => {
     setComponentMouted(true);
   }, []);
 
-  const { incrementAttempts, setGame3Spell } = useGame();
+  const gameContext = useGame();
 
   const [randomSpell, setRandomSpell] = useLocalStorage<Spell | null>(
     "randomSpellGame3",
@@ -61,19 +65,32 @@ export default function Spells() {
 
     setErrorMessage("");
 
-    setAttempts((prevAttempts) => {
-      const newAttempts = prevAttempts + 1;
-      incrementAttempts(newAttempts);
-      return newAttempts;
-    });
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+    gameContext.incrementAttempts(newAttempts);
 
     if (selectedSpellId === randomSpell.id) {
       setGameIsFinished(true);
-      setGame3Spell(randomSpell);
+      gameContext.setGame3Spell(randomSpell);
       setIsDialogOpen(true);
     } else {
       setErrorMessage("Incorrect! Try again.");
     }
+  }
+
+  function handleFinishGame() {
+    const data: any = {
+      game_1_character_id: gameContext.game1Character?.id,
+      game_2_character_id: gameContext.game2Character?.id,
+      game_3_spell_id: gameContext.game3Spell?.id,
+      attempts: gameContext.attempts,
+    };
+    console.log(data);
+    create(data, {
+      onSuccess: () => {
+        router.push("/dashboard");
+      },
+    });
   }
 
   if (!componentMouted)
@@ -85,9 +102,12 @@ export default function Spells() {
 
   return (
     <div className="px-10 pb-7">
-      <h1 className="text-center text-card-foreground text-2xl font-bold mt-5">
-        Game 3 - Guess the Spell
-      </h1>
+      <div className="flex justify-center items-center gap-3">
+        <h1 className="text-center text-card-foreground text-2xl font-bold mt-5">
+          Game 3 - Guess the Spell
+        </h1>
+        <Wand className="mt-5" />
+      </div>
       <p className="text-muted-foreground text-center mt-3 mb-8">
         Try to guess which spell is by the description.
       </p>
@@ -99,7 +119,7 @@ export default function Spells() {
       )}
 
       {errorMessage && (
-        <p className="text-center text-red-500 font-medium mb-4">
+        <p className="text-center text-red-500 font-medium mb-4 mt-5">
           {errorMessage}
         </p>
       )}
@@ -112,9 +132,9 @@ export default function Spells() {
           <p className="text-green-600 text-center mb-4">
             Congratulations, you got it right wizard!
           </p>
-          <Button onClick={() => router.push("/game/characterImage")}>
-            <ArrowRight className="mr-2" />
-            Next Game
+          <Button className="mt-5" onClick={() => handleFinishGame()}>
+            <Flag className="mr-2" />
+            Finish Game
           </Button>
         </div>
       )}
@@ -139,9 +159,9 @@ export default function Spells() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => setIsDialogOpen(false)}>
-              <ArrowRight />
-              Next Game
+            <Button onClick={() => handleFinishGame()}>
+              <Flag />
+              Finish Game
             </Button>
           </DialogFooter>
         </DialogContent>
