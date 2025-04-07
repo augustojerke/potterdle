@@ -36,7 +36,7 @@ export function useGameById(id: number) {
   return useQuery({
     queryKey: ["game", id],
     queryFn: () => getGameById(id),
-    enabled: !!id, // Só busca se o ID for válido
+    enabled: !!id,
   });
 }
 
