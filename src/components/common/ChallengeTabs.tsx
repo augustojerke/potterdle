@@ -19,7 +19,7 @@ export function ChallengeTabs() {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="games">
-        <div className="w-full">
+        <div className="w-full py-4">
           <GamesList />
         </div>
       </TabsContent>
