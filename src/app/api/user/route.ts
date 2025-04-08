@@ -2,6 +2,34 @@ import { prisma } from "@/lib/prisma";
 import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+
+export async function GET(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        {
+          message: "Usuário precisa estar autenticado!",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        points: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, users }, { status: 200 });
+  } catch {}
+}
 
 export async function POST(req: NextRequest) {
   try {

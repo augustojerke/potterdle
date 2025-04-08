@@ -16,6 +16,7 @@ import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import charactersData from "@/app/data/characters.json";
 import spellsData from "@/app/data/spells.json";
 import { Game } from "@/types/game";
+import { SelectUsers } from "./SelectUsers";
 
 interface ButtonChallangeProps {
   game: Game;
@@ -23,6 +24,7 @@ interface ButtonChallangeProps {
 
 export function ButtonChallange({ game }: ButtonChallangeProps) {
   const [open, setOpen] = useState(false);
+  const [userSelected, setSelectedUser] = useState("");
 
   const getCharacter = (id: string) =>
     charactersData.find((char) => char.id === id);
@@ -106,6 +108,7 @@ export function ButtonChallange({ game }: ButtonChallangeProps) {
             </TableBody>
           </Table>
         </div>
+        <SelectUsers onChange={(e) => setSelectedUser(e)} />
 
         <DialogFooter>
           <Button variant="secondary" onClick={() => setOpen(false)}>
