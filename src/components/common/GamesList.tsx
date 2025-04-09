@@ -1,3 +1,4 @@
+"use client";
 import { Game } from "@prisma/client";
 import charactersData from "@/app/data/characters.json";
 import spellsData from "@/app/data/spells.json";
@@ -10,12 +11,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ButtonChallange } from "./ButtonChallenge";
+import { DeleteGameButton } from "./DeleteGameButton";
+import { useGames } from "@/app/actions/game-actions";
+import { LoadingSpinner } from "./LoadingSpinner";
 
-export async function GamesList() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/game`);
-  const games: (Game & { image: string })[] = await response.json();
+export function GamesList() {
+  const { data: games, isLoading } = useGames();
 
-  if (games.length === 0) {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <LoadingSpinner color="text-white text-center" />
+      </div>
+    );
+  }
+
+  if (!games || games.length === 0) {
     return <h1>No games played...</h1>;
   }
 
@@ -41,7 +52,7 @@ export async function GamesList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {games.map((game) => {
+          {games.map((game: Game) => {
             const char1 = getCharacter(game.game_1_character_id);
             const char2 = getCharacter(game.game_2_character_id);
 
@@ -70,6 +81,7 @@ export async function GamesList() {
                 <TableCell>{getSpellName(game.game_3_spell_id)}</TableCell>
                 <TableCell>{game.attempts}</TableCell>
                 <TableCell className="text-right">
+                  <DeleteGameButton id={game.id} />
                   <ButtonChallange game={game} />
                 </TableCell>
               </TableRow>

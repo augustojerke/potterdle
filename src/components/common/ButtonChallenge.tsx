@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Swords } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -17,6 +17,7 @@ import charactersData from "@/app/data/characters.json";
 import spellsData from "@/app/data/spells.json";
 import { Game } from "@/types/game";
 import { SelectUsers } from "./SelectUsers";
+import { useCreateChallenge } from "@/app/actions/challenge-actions";
 
 interface ButtonChallangeProps {
   game: Game;
@@ -25,6 +26,16 @@ interface ButtonChallangeProps {
 export function ButtonChallange({ game }: ButtonChallangeProps) {
   const [open, setOpen] = useState(false);
   const [userSelected, setSelectedUser] = useState("");
+  const [disableButton, setDisableButton] = useState(true);
+  const { mutateAsync: create } = useCreateChallenge();
+
+  useEffect(() => {
+    if (userSelected == "") {
+      setDisableButton(true);
+    } else {
+      setDisableButton(false);
+    }
+  }, [userSelected]);
 
   const getCharacter = (id: string) =>
     charactersData.find((char) => char.id === id);
@@ -33,6 +44,18 @@ export function ButtonChallange({ game }: ButtonChallangeProps) {
   const char1 = getCharacter(game.game_1_character_id);
   const char2 = getCharacter(game.game_2_character_id);
   const spell = getSpell(game.game_3_spell_id);
+
+  function handleChallenge() {
+    const data: any = {
+      challenged_user_id: userSelected,
+      game_id: game.id,
+    };
+    create(data, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -114,7 +137,7 @@ export function ButtonChallange({ game }: ButtonChallangeProps) {
           <Button variant="secondary" onClick={() => setOpen(false)}>
             Close
           </Button>
-          <Button onClick={() => setOpen(false)}>
+          <Button onClick={() => handleChallenge()} disabled={disableButton}>
             <Swords />
             Challenge
           </Button>

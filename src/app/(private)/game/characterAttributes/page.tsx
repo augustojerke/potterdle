@@ -141,7 +141,7 @@ export default function CharacterAttributes() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="w-full max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-xl">Congratulations!</DialogTitle>
             <DialogDescription className="text-xl">

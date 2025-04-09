@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
+
     if (!session?.user) {
       return NextResponse.json(
         {
@@ -20,6 +21,11 @@ export async function GET(req: NextRequest) {
     }
 
     const users = await prisma.user.findMany({
+      where: {
+        id: {
+          not: session.user.id,
+        },
+      },
       select: {
         id: true,
         username: true,
@@ -28,7 +34,12 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, users }, { status: 200 });
-  } catch {}
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: "Erro ao buscar usuários." },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {

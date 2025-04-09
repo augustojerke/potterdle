@@ -28,14 +28,12 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-  console.log(session);
-
   const challenge = await prisma.challenge.create({
     data: {
       challenger_user_id: session?.user.id,
       challenged_user_id: data.challenged_user_id,
       game_id: data.game_id,
-      winner_user_id: data.winner_user_id,
+      winner_user_id: null,
     },
   });
 

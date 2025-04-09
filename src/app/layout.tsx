@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import AuthProvider from "@/components/providers/AuthProvider";
-import AutoLogout from "@/components/common/AutoLogout";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ModeToggle } from "@/components/common/ModeToggle";
 import "./globals.css";
@@ -43,10 +42,7 @@ export default function RootLayout({
           <div className="absolute top-3 right-3">
             <ModeToggle />
           </div>
-          <AuthProvider>
-            <AutoLogout />
-            {children}
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>
