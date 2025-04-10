@@ -1,14 +1,31 @@
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET() {
   const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json(
+      {
+        message: "Usuário precisa estar autenticado!",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
   const challenges = await prisma.challenge.findMany({
     where: {
-      challenger_user_id: session?.user.id,
+      OR: [
+        { challenged_user_id: session?.user.id },
+        { challenged_user_id: session?.user.id },
+      ],
+    },
+    include: {
+      game: true,
+      challenger_user: true,
+      challenged_user: true,
     },
   });
 

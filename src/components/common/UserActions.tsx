@@ -31,17 +31,17 @@ export function UserActions() {
     <div className="flex flex-col items-center justify-center py-2 gap-4">
       <Button
         onClick={() => handlePlay()}
-        className="w-50 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        className="w-50 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border-ring border-2"
       >
         <Play size={20} />
         Play
       </Button>
-      <Button className="w-50 flex items-center gap-2 px-4 py-2">
+      <Button className="w-50 flex items-center gap-2 px-4 py-2 border-ring border-2">
         <Star fill="#facc15" size={20} />
         Ranking
       </Button>
       <Button
-        className="w-50 flex items-center gap-2 px-4 py-2"
+        className="w-50 flex items-center gap-2 px-4 py-2 border-ring border-2"
         onClick={() => setOpenEditDialog(true)}
       >
         <Pencil fill="orange" size={20} />
@@ -53,7 +53,7 @@ export function UserActions() {
       />
       <Button
         onClick={() => handleSignOut()}
-        className="w-50 flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        className="w-50 flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 border-ring border-2"
       >
         <LogOut size={20} />
         Logout

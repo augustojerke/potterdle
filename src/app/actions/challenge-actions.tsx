@@ -29,6 +29,7 @@ export function useChallenges() {
     queryKey: ["challenges"],
     queryFn: getChallenges,
     refetchOnWindowFocus: false,
+    refetchInterval: 10000,
   });
 }
 
