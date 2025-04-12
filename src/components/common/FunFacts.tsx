@@ -5,7 +5,7 @@ export function FunFacts() {
   const fact = harryPotterFacts[randomIndex];
 
   return (
-    <div className="bg-card py-10">
+    <div className="bg-card py-10 px-10">
       <div className="text-center text-primary font-serif text-xl mb-4">
         ✨ Harry Potter Fun Fact ✨
       </div>

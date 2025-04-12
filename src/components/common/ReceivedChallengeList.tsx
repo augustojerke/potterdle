@@ -88,8 +88,8 @@ export function ReceivedChallegeList(props: ReceivedChallegeListProps) {
                   </span>
                 </TableCell>
                 <TableCell className="text-right space-x-2">
-                  <DeclineChallengeButton id={challenge.id} />
-                  <AcceptChallengeButton />
+                  <DeclineChallengeButton challenge={challenge} />
+                  <AcceptChallengeButton challenge={challenge} />
                 </TableCell>
               </TableRow>
             );

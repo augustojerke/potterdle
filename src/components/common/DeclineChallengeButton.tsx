@@ -11,27 +11,26 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { useState } from "react";
-import { useDeleteGame } from "@/app/actions/game-actions";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDeclineChallenge } from "@/app/actions/challenge-actions";
 
-export function DeclineChallengeButton(props: { id: string }) {
+interface DeclineChallengeButtonProps {
+  challenge: Challenge;
+}
+
+export function DeclineChallengeButton(props: DeclineChallengeButtonProps) {
   const [open, setOpen] = useState(false);
-  const { mutateAsync: deleteGame, isPending } = useDeleteGame();
+  const { mutateAsync: decline, isPending } = useDeclineChallenge();
 
   const queryClient = useQueryClient();
 
   function handleDeclineChallenge() {
-    deleteGame(
-      {
-        id: props.id,
+    decline(props.challenge, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["challenges"] });
+        setOpen(false);
       },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["challenges"] });
-          setOpen(false);
-        },
-      }
-    );
+    });
   }
 
   return (
@@ -58,7 +57,7 @@ export function DeclineChallengeButton(props: { id: string }) {
           <Button
             className="bg-red-600 text-white hover:bg-red-500"
             variant="secondary"
-            onClick={() => handleDeclineChallenge()}
+            onClick={handleDeclineChallenge}
             loading={isPending}
             disabled={isPending}
           >

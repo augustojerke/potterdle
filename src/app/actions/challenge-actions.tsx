@@ -85,3 +85,23 @@ async function deleteChallenge(id: number) {
   }
   return res.json();
 }
+
+async function declineChallenge(data: any) {
+  const res = await fetch(`/api/challenge/decline`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error("Erro ao deletar Challenge");
+  }
+  return res.json();
+}
+
+export function useDeclineChallenge() {
+  return useMutation({
+    mutationFn: (data: any) => declineChallenge(data),
+  });
+}

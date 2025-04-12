@@ -14,6 +14,9 @@ interface GameContextData {
   game3Spell: Spell | undefined;
   setGame3Spell: (value: Spell) => void;
 
+  gameChallenge: Challenge | null;
+  setGameChallenge: (value: Challenge) => void;
+
   resetGame: () => void;
 }
 
@@ -24,6 +27,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game1Character, setGame1Character] = useState<Character | undefined>();
   const [game2Character, setGame2Character] = useState<Character | undefined>();
   const [game3Spell, setGame3Spell] = useState<Spell | undefined>();
+  const [gameChallenge, setGameChallenge] = useState<Challenge | null>(null);
 
   const incrementAttempts = (value: number) =>
     setAttempts((prev) => prev + value);
@@ -33,6 +37,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setGame1Character(undefined);
     setGame2Character(undefined);
     setGame3Spell(undefined);
+    setGameChallenge(null);
   };
 
   return (
@@ -49,6 +54,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
         game3Spell,
         setGame3Spell,
+
+        gameChallenge,
+        setGameChallenge,
 
         resetGame,
       }}

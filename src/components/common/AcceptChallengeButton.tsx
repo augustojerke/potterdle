@@ -1,5 +1,5 @@
 "use client";
-import { CircleCheck, CircleX, Trash } from "lucide-react";
+import { CircleCheck, Play } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,11 +11,25 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { useState } from "react";
+import { useGame } from "@/contexts/GameContext";
+import { useRouter } from "next/navigation";
 
-export function AcceptChallengeButton() {
+interface AcceptChallengeButtonProps {
+  challenge: Challenge;
+}
+
+export function AcceptChallengeButton(props: AcceptChallengeButtonProps) {
+  const gameContext = useGame();
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
 
-  function handleAcceptChallenge() {}
+  function handleAcceptChallenge() {
+    gameContext.setGameChallenge(props.challenge);
+    router.push("/game/characterAttributes");
+  }
+
+  function handleDeclineChallenge() {}
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,12 +47,20 @@ export function AcceptChallengeButton() {
         <DialogHeader>
           <DialogTitle>Accept Challenge</DialogTitle>
           <DialogDescription>
-            Are you sure you want to accept this challenge?
+            Are you sure you want to accept this challenge?<br></br>
+            <strong className="font-bold">
+              20 points if you win, -5 points if you lose.
+            </strong>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button onClick={() => setOpen(false)}>Close</Button>
-          <Button variant="secondary" onClick={() => handleAcceptChallenge()}>
+          <Button
+            className="bg-green-500 hover:bg-green-600"
+            variant="secondary"
+            onClick={() => handleAcceptChallenge()}
+          >
+            <Play />
             Start Game
           </Button>
         </DialogFooter>
