@@ -26,7 +26,7 @@ export default function CharacterImage() {
   const router = useRouter();
   const [componentMounted, setComponentMounted] = useState(false);
 
-  const { incrementAttempts, setGame2Character } = useGame();
+  const { incrementAttempts, setGame2Character, gameChallenge } = useGame();
 
   const [randomCharacter, setRandomCharacter] =
     useLocalStorage<Character | null>("randomCharacterGame2", null);
@@ -50,9 +50,16 @@ export default function CharacterImage() {
   }, []);
 
   useEffect(() => {
-    if (!randomCharacter) {
+    if (!randomCharacter && !gameChallenge) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       setRandomCharacter(characters[randomIndex]);
+    } else {
+      const char = characters.find(
+        (char) => char.id === gameChallenge?.game.game_2_character_id
+      );
+      if (char) {
+        setRandomCharacter(char);
+      }
     }
   }, [randomCharacter, setRandomCharacter]);
 

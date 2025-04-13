@@ -51,9 +51,16 @@ export default function Spells() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (!randomSpell) {
+    if (!randomSpell && !gameContext.gameChallenge) {
       const randomIndex = Math.floor(Math.random() * spells.length);
       setRandomSpell(spells[randomIndex]);
+    } else {
+      const spell = spells.find(
+        (spell) => spell.id === gameContext.gameChallenge?.game.game_3_spell_id
+      );
+      if (spell) {
+        setRandomSpell(spell);
+      }
     }
   }, [randomSpell, setRandomSpell]);
 

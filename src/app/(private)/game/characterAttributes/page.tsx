@@ -24,7 +24,7 @@ export default function CharacterAttributes() {
   const router = useRouter();
   const [componentMouted, setComponentMouted] = useState(false);
 
-  const { incrementAttempts, setGame1Character } = useGame();
+  const { incrementAttempts, setGame1Character, gameChallenge } = useGame();
 
   const [randomCharacter, setRandomCharacter] =
     useLocalStorage<Character | null>("randomCharacter", null);
@@ -44,9 +44,16 @@ export default function CharacterAttributes() {
   }, []);
 
   useEffect(() => {
-    if (!randomCharacter) {
+    if (!randomCharacter && !gameChallenge) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       setRandomCharacter(characters[randomIndex]);
+    } else {
+      const char = characters.find(
+        (char) => char.id === gameChallenge?.game.game_1_character_id
+      );
+      if (char) {
+        setRandomCharacter(char);
+      }
     }
   }, [randomCharacter, setRandomCharacter]);
 
