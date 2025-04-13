@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export async function createUser(values: User) {
   try {
@@ -13,6 +13,12 @@ export async function createUser(values: User) {
   } catch (e: any) {
     console.log(e.message);
   }
+}
+
+export function useUpdateUser() {
+  return useMutation({
+    mutationFn: (data: any) => updateUser(data),
+  });
 }
 
 async function getUsers() {

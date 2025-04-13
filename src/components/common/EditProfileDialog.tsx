@@ -1,9 +1,8 @@
 "use client";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -22,7 +21,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { updateUser } from "@/app/actions/user-actions";
-import { useRouter } from "next/navigation";
+import { useUpdateUser } from "@/app/actions/user-actions";
 
 interface EditProfileDialogProps {
   open: boolean;
@@ -42,7 +41,7 @@ export function EditProfileDialog({
 
   const [name, setName] = useState(currentName ?? "");
   const [house, setHouse] = useState(currentHouse ?? "");
-  const router = useRouter();
+  const { mutateAsync: update, isPending } = useUpdateUser();
 
   useEffect(() => {
     setName(currentName ?? "");
@@ -51,10 +50,9 @@ export function EditProfileDialog({
 
   async function handleEditProfile() {
     try {
-      await updateUser({ name, house });
+      await update({ name, house });
       await queryClient.invalidateQueries({ queryKey: ["users"] });
       await queryClient.invalidateQueries({ queryKey: ["user"] });
-      router.refresh();
       onOpenChange(false);
     } catch (e) {
       console.error("Erro ao editar perfil:", e);
@@ -104,7 +102,12 @@ export function EditProfileDialog({
         </div>
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)}>Close</Button>
-          <Button variant="secondary" onClick={handleEditProfile}>
+          <Button
+            disabled={isPending}
+            loading={isPending}
+            variant="secondary"
+            onClick={handleEditProfile}
+          >
             <Pencil />
             Save
           </Button>
