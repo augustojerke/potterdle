@@ -6,8 +6,10 @@ import { useGame } from "@/contexts/GameContext";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { EditProfileDialog } from "./EditProfileDialog";
+import { useUser } from "@/app/actions/user-actions";
 
 export function UserActions() {
+  const { data: user, isLoading, error } = useUser();
   const router = useRouter();
   const { resetGame } = useGame();
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -50,6 +52,9 @@ export function UserActions() {
       <EditProfileDialog
         open={openEditDialog}
         onOpenChange={setOpenEditDialog}
+        userId={user.id}
+        currentName={user.username}
+        currentHouse={user.house}
       />
       <Button
         onClick={() => handleSignOut()}
