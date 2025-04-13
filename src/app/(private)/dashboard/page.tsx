@@ -1,26 +1,24 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { prisma } from "@/lib/prisma";
+"use client";
+
 import { UserProfile } from "@/components/common/UserProfile";
 import { UserActions } from "@/components/common/UserActions";
 import { ChallengeTabs } from "@/components/common/ChallengeTabs";
 import { Separator } from "@/components/ui/separator";
 import { FunFacts } from "@/components/common/FunFacts";
+import { useUser } from "@/app/actions/user-actions";
 
-export default async function Page() {
-  const session = await getServerSession(authOptions);
-  const user = await prisma.user.findUniqueOrThrow({
-    where: {
-      id: session?.user.id,
-    },
-  });
+export default function Page() {
+  const { data: user, isLoading, error } = useUser();
+
+  if (isLoading) return <div>Carregando...</div>;
+  if (error || !user) return <div>Erro ao carregar dados do usuário</div>;
 
   return (
     <div>
       <div className="p-5 flex flex-col xl:flex-row justify-evenly items-center gap-10">
         <div className="flex justify-center items-center gap-5">
           <UserProfile
-            username={session?.user.username}
+            username={user.username}
             house={user.house}
             points={user.points}
           />

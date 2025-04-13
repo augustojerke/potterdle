@@ -36,3 +36,41 @@ export function useUsers() {
     refetchOnWindowFocus: false,
   });
 }
+
+export function useUser() {
+  return useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export async function updateUser(data: { name: string; house: string }) {
+  try {
+    const res = await fetch("/api/user", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    return await res.json();
+  } catch (e: any) {
+    console.error("Update error:", e.message);
+    throw e;
+  }
+}
+
+async function getUser() {
+  try {
+    const res = await fetch("/api/user/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    return data.user;
+  } catch (e: any) {
+    console.log("Erro ao buscar usuário logado:", e.message);
+    throw e;
+  }
+}

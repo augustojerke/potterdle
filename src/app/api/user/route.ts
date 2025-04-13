@@ -75,3 +75,40 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return NextResponse.json(
+      { message: "Usuário não autenticado." },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const body = await req.json();
+    const { name, house } = body;
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        username: name,
+        house,
+      },
+    });
+
+    return NextResponse.json(
+      { success: true, user: updatedUser },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
+    return NextResponse.json(
+      { message: "Erro ao atualizar o usuário", success: false },
+      { status: 500 }
+    );
+  }
+}
