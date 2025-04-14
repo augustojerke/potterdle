@@ -29,8 +29,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game3Spell, setGame3Spell] = useState<Spell | undefined>();
   const [gameChallenge, setGameChallenge] = useState<Challenge | null>(null);
 
-  const incrementAttempts = (value: number) =>
+  const incrementAttempts = (value: number) => {
     setAttempts((prev) => prev + value);
+    console.log(attempts);
+  };
 
   const resetGame = () => {
     setAttempts(0);

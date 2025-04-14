@@ -26,7 +26,12 @@ export default function CharacterImage() {
   const router = useRouter();
   const [componentMounted, setComponentMounted] = useState(false);
 
-  const { incrementAttempts, setGame2Character, gameChallenge } = useGame();
+  const {
+    incrementAttempts,
+    setGame2Character,
+    gameChallenge,
+    attempts: at,
+  } = useGame();
 
   const [randomCharacter, setRandomCharacter] =
     useLocalStorage<Character | null>("randomCharacterGame2", null);
@@ -46,6 +51,16 @@ export default function CharacterImage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
+    console.log(localStorage.getItem("gameIsFinished"));
+    if (typeof window !== "undefined") {
+      if (
+        !localStorage.getItem("gameIsFinished") ||
+        localStorage.getItem("gameIsFinished") == "false"
+      ) {
+        router.push("/game/characterAttributes");
+      }
+    }
+
     setComponentMounted(true);
   }, []);
 
@@ -70,6 +85,10 @@ export default function CharacterImage() {
     : Math.max(maxBlur - attempts * blurReductionPerAttempt, 0);
 
   function handleGuess() {
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+    incrementAttempts(newAttempts);
+
     if (!selectedCharacterId || !randomCharacter) return;
 
     const guessedCharacter = characters.find(
@@ -77,13 +96,10 @@ export default function CharacterImage() {
     );
 
     if (guessedCharacter) {
-      setAttempts(attempts + 1);
-
       if (guessedCharacter.id === randomCharacter.id) {
         setGameIsFinished(true);
         setErrorMessage("");
         setGame2Character(randomCharacter);
-        incrementAttempts(attempts);
         setIsDialogOpen(true);
       } else {
         setErrorMessage("Wrong guess, try again!");

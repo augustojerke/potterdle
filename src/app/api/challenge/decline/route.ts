@@ -6,6 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 export async function PUT(req: NextRequest) {
   const data = await req.json();
   const session = await getServerSession(authOptions);
+
   if (!session?.user) {
     return NextResponse.json(
       {
@@ -16,6 +17,7 @@ export async function PUT(req: NextRequest) {
       }
     );
   }
+
   await prisma.challenge.update({
     where: { id: data.id },
     data: { is_finished: true, winner_user_id: data.challenger_user_id },
@@ -28,9 +30,20 @@ export async function PUT(req: NextRequest) {
   });
 
   const pointsForUserLoserByDecline = -3;
+
+  const loser = await prisma.user.findUnique({
+    where: { id: data.challenged_user_id },
+    select: { points: true },
+  });
+
+  const newLoserPoints = Math.max(
+    (loser?.points || 0) + pointsForUserLoserByDecline,
+    0
+  );
+
   await prisma.user.update({
     where: { id: data.challenged_user_id },
-    data: { points: { increment: pointsForUserLoserByDecline } },
+    data: { points: newLoserPoints },
   });
 
   return NextResponse.json("ok");

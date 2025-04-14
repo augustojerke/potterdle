@@ -17,6 +17,8 @@ import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { SelectSpells } from "@/components/common/SelectSpells";
 import { useCreateGame } from "@/app/actions/game-actions";
+import { useFinishChallenge } from "@/app/actions/challenge-actions";
+import { FinishGameDialog } from "@/components/common/FinishGameDialog";
 
 const spells: Spell[] = spellsData;
 
@@ -26,8 +28,21 @@ export default function Spells() {
   const { mutateAsync: create, isPending: isLoadingCreateGame } =
     useCreateGame();
 
+  const { mutateAsync: finish, isPending: isPendingFinish } =
+    useFinishChallenge();
+
   const [componentMouted, setComponentMouted] = useState(false);
+
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (
+        !localStorage.getItem("gameIsFinished2") ||
+        localStorage.getItem("gameIsFinished2") == "false"
+      ) {
+        router.push("/game/characterImage");
+      }
+    }
+
     setComponentMouted(true);
   }, []);
 
@@ -49,6 +64,7 @@ export default function Spells() {
 
   const [selectedSpellId, setSelectedSpellId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpenFinish, setIsDialogOpenFinish] = useState(false);
 
   useEffect(() => {
     if (!randomSpell && !gameContext.gameChallenge) {
@@ -86,18 +102,32 @@ export default function Spells() {
   }
 
   function handleFinishGame() {
-    const data: any = {
-      game_1_character_id: gameContext.game1Character?.id,
-      game_2_character_id: gameContext.game2Character?.id,
-      game_3_spell_id: gameContext.game3Spell?.id,
-      attempts: gameContext.attempts,
-    };
-    console.log(data);
-    create(data, {
-      onSuccess: () => {
-        router.push("/dashboard");
-      },
-    });
+    if (!gameContext.gameChallenge) {
+      const data: any = {
+        game_1_character_id: gameContext.game1Character?.id,
+        game_2_character_id: gameContext.game2Character?.id,
+        game_3_spell_id: gameContext.game3Spell?.id,
+        attempts: gameContext.attempts,
+      };
+      create(data, {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+      });
+    } else {
+      const data: any = {
+        game_1_character_id: gameContext.game1Character?.id,
+        game_2_character_id: gameContext.game2Character?.id,
+        game_3_spell_id: gameContext.game3Spell?.id,
+        attempts: gameContext.attempts,
+        gameChallenge: gameContext.gameChallenge,
+      };
+      finish(data, {
+        onSuccess: () => {
+          setIsDialogOpenFinish(true);
+        },
+      });
+    }
   }
 
   if (!componentMouted)
@@ -156,6 +186,11 @@ export default function Spells() {
         </Button>
       </div>
 
+      <FinishGameDialog
+        open={isDialogOpenFinish}
+        onOpenChange={setIsDialogOpenFinish}
+      />
+
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full max-w-3xl">
           <DialogHeader>
@@ -166,7 +201,11 @@ export default function Spells() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => handleFinishGame()}>
+            <Button
+              disabled={isLoadingCreateGame || isPendingFinish}
+              loading={isLoadingCreateGame || isPendingFinish}
+              onClick={() => handleFinishGame()}
+            >
               <Flag />
               Finish Game
             </Button>

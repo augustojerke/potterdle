@@ -6,11 +6,17 @@ import { ChallengeTabs } from "@/components/common/ChallengeTabs";
 import { Separator } from "@/components/ui/separator";
 import { FunFacts } from "@/components/common/FunFacts";
 import { useUser } from "@/app/actions/user-actions";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 
 export default function Page() {
   const { data: user, isLoading, error } = useUser();
 
-  if (isLoading) return <div>Carregando...</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center p-10">
+        <LoadingSpinner color="text-white" />
+      </div>
+    );
   if (error || !user) return <div>Erro ao carregar dados do usuário</div>;
 
   return (

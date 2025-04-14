@@ -24,7 +24,12 @@ export default function CharacterAttributes() {
   const router = useRouter();
   const [componentMouted, setComponentMouted] = useState(false);
 
-  const { incrementAttempts, setGame1Character, gameChallenge } = useGame();
+  const {
+    incrementAttempts,
+    setGame1Character,
+    gameChallenge,
+    attempts: at,
+  } = useGame();
 
   const [randomCharacter, setRandomCharacter] =
     useLocalStorage<Character | null>("randomCharacter", null);
@@ -78,7 +83,10 @@ export default function CharacterAttributes() {
   };
 
   const handleGuess = () => {
-    setAttempts((prev) => prev + 1);
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+    incrementAttempts(newAttempts);
+
     if (!selectedCharacterId || !randomCharacter) return;
 
     const guessedCharacter = characters.find(
@@ -97,7 +105,6 @@ export default function CharacterAttributes() {
       if (allAttributesCorrect) {
         setGameIsFinished(true);
         setGame1Character(randomCharacter);
-        incrementAttempts(attempts);
         setIsDialogOpen(true);
       }
     }

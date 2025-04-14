@@ -115,7 +115,7 @@ async function surrenderChallenge(data: any) {
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    throw new Error("Erro ao deletar Challenge");
+    throw new Error("Erro ao desistir do Challenge");
   }
   return res.json();
 }
@@ -123,5 +123,25 @@ async function surrenderChallenge(data: any) {
 export function useSurrenderChallenge() {
   return useMutation({
     mutationFn: (data: any) => surrenderChallenge(data),
+  });
+}
+
+async function finishChallenge(data: any) {
+  const res = await fetch(`/api/challenge/finish`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error("Erro ao finalizar Challenge");
+  }
+  return res.json();
+}
+
+export function useFinishChallenge() {
+  return useMutation({
+    mutationFn: (data: any) => finishChallenge(data),
   });
 }
