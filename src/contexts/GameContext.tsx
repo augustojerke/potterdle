@@ -38,6 +38,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setGame2Character(undefined);
     setGame3Spell(undefined);
     setGameChallenge(null);
+    localStorage.clear();
   };
 
   return (

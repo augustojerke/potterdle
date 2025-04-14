@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { updateUser } from "@/app/actions/user-actions";
 import { useUpdateUser } from "@/app/actions/user-actions";
 
 interface EditProfileDialogProps {

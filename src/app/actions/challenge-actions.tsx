@@ -105,3 +105,23 @@ export function useDeclineChallenge() {
     mutationFn: (data: any) => declineChallenge(data),
   });
 }
+
+async function surrenderChallenge(data: any) {
+  const res = await fetch(`/api/challenge/surrender`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error("Erro ao deletar Challenge");
+  }
+  return res.json();
+}
+
+export function useSurrenderChallenge() {
+  return useMutation({
+    mutationFn: (data: any) => surrenderChallenge(data),
+  });
+}

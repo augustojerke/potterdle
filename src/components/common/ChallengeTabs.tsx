@@ -5,6 +5,7 @@ import { useChallenges } from "@/app/actions/challenge-actions";
 import { useSession } from "next-auth/react";
 import { ReceivedChallegeList } from "./ReceivedChallengeList";
 import { BadgeCheck, Hourglass, MailOpen, Gamepad2 } from "lucide-react";
+import { CompletedChallengesList } from "./CompletedChallengesList";
 
 export function ChallengeTabs() {
   const { data: challanges = [] } = useChallenges();
@@ -51,7 +52,7 @@ export function ChallengeTabs() {
 
       <TabsContent value="completed">
         <div className="w-full py-4">
-          {/* Componente de desafios finalizados, se houver */}
+          <CompletedChallengesList challenges={finishedChallenges} />
         </div>
       </TabsContent>
 
