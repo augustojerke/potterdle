@@ -36,8 +36,8 @@ export default function Spells() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (
-        !localStorage.getItem("gameIsFinished2") ||
-        localStorage.getItem("gameIsFinished2") == "false"
+        !localStorage.getItem("gameIsFinishedGame2") ||
+        localStorage.getItem("gameIsFinishedGame2") == "false"
       ) {
         router.push("/game/characterImage");
       }
@@ -124,6 +124,7 @@ export default function Spells() {
       };
       finish(data, {
         onSuccess: () => {
+          setIsDialogOpen(false);
           setIsDialogOpenFinish(true);
         },
       });

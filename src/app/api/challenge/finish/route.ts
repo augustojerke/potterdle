@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest) {
   let loserUserId;
   let pointsForUserWinner;
   let pointsForUserLoser;
-  if (data.attempts >= data.gameChallenge.game.attempts) {
+  if (data.attempts <= data.gameChallenge.game.attempts) {
     winnerUserId = data.gameChallenge.challenged_user_id;
     loserUserId = data.gameChallenge.challenger_user_id;
     pointsForUserWinner = 20;
