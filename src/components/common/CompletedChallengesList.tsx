@@ -102,8 +102,6 @@ export function CompletedChallengesList(props: CompleteChallengeListProps) {
 import { useSession } from "next-auth/react";
 function GameStatus(winner_id: any) {
   const { data: session } = useSession();
-  console.log(winner_id.winner_id, session?.user.id);
-
   if (winner_id.winner_id == session?.user.id)
     return <span className="text-green-600 font-bold">Win</span>;
   else return <span className="text-red-600 font-bold">Lose</span>;
