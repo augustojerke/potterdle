@@ -19,17 +19,15 @@ export async function PUT(req: NextRequest) {
   let winnerUserId;
   let loserUserId;
   let pointsForUserWinner;
-  let pointsForUserLoser;
+  let pointsForUserLoser = -10;
   if (data.attempts <= data.gameChallenge.game.attempts) {
     winnerUserId = data.gameChallenge.challenged_user_id;
     loserUserId = data.gameChallenge.challenger_user_id;
     pointsForUserWinner = 20;
-    pointsForUserLoser = -10;
   } else {
     winnerUserId = data.gameChallenge.challenger_user_id;
     loserUserId = data.gameChallenge.challenged_user_id;
     pointsForUserWinner = 10;
-    pointsForUserLoser = -10;
   }
   await prisma.challenge.update({
     where: { id: data.gameChallenge.id },
@@ -50,6 +48,28 @@ export async function PUT(req: NextRequest) {
   await prisma.user.update({
     where: { id: loserUserId },
     data: { points: newLoserPoints },
+  });
+
+  const loserInfo = await prisma.user.findUnique({
+    where: { id: loserUserId },
+  });
+  const winnerInfo = await prisma.user.findUnique({
+    where: { id: winnerUserId },
+  });
+
+  await prisma.history.create({
+    data: {
+      user_id: winnerUserId,
+      description: `You received ${pointsForUserWinner} for winning a challenge from ${loserInfo?.username}`,
+      points: pointsForUserWinner,
+    },
+  });
+  await prisma.history.create({
+    data: {
+      user_id: loserUserId,
+      description: `You lost -10 points for losing a challenge from ${winnerInfo?.username}`,
+      points: -10,
+    },
   });
 
   return NextResponse.json("ok");

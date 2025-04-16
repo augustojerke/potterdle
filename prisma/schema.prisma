@@ -18,6 +18,7 @@ model User {
   challengesAsChallenger Challenge[] @relation("ChallengerRelation")
   challengesAsChallenged Challenge[] @relation("ChallengedRelation")
   Game                   Game[]
+  History                History[]
 }
 
 model Challenge {
@@ -43,4 +44,13 @@ model Game {
 
   Challenge Challenge[] @relation("ChallengeGame")
   User      User?       @relation(fields: [userId], references: [id])
+}
+
+model History {
+  id          String @id @default(uuid())
+  user_id     String
+  description String
+  points      Int
+
+  User User @relation(fields: [user_id], references: [id])
 }

@@ -4,11 +4,14 @@ import { GamesList } from "./GamesList";
 import { useChallenges } from "@/app/actions/challenge-actions";
 import { useSession } from "next-auth/react";
 import { ReceivedChallegeList } from "./ReceivedChallengeList";
-import { BadgeCheck, Hourglass, MailOpen, Gamepad2 } from "lucide-react";
+import { BadgeCheck, MailOpen, Gamepad2, NotebookPen } from "lucide-react";
 import { CompletedChallengesList } from "./CompletedChallengesList";
+import { useHistory } from "@/app/actions/history-actions";
+import { HistoryList } from "./HistoryList";
 
 export function ChallengeTabs() {
   const { data: challanges = [] } = useChallenges();
+  const { data: history } = useHistory();
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
@@ -42,6 +45,11 @@ export function ChallengeTabs() {
           <MailOpen className="inline-block w-4 h-4 mr-1 text-blue-500" />
           Received ({receivedChallenges.length})
         </TabsTrigger>
+
+        <TabsTrigger value="history" className="flex-1 text-center">
+          <NotebookPen className="inline-block w-4 h-4 mr-1 text-amber-700" />
+          History
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="games">
@@ -59,6 +67,12 @@ export function ChallengeTabs() {
       <TabsContent value="received">
         <div className="w-full py-4">
           <ReceivedChallegeList challenges={receivedChallenges} />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="history">
+        <div className="w-full py-4">
+          <HistoryList history={history} />
         </div>
       </TabsContent>
     </Tabs>

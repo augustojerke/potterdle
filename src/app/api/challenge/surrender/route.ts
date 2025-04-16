@@ -45,5 +45,20 @@ export async function PUT(req: NextRequest) {
     data: { points: newLoserPoints },
   });
 
+  await prisma.history.create({
+    data: {
+      user_id: data.challenger_user_id,
+      description: `You received 20 points for ${data.challenged_user.username} surrender your challenge`,
+      points: 20,
+    },
+  });
+  await prisma.history.create({
+    data: {
+      user_id: data.challenger_user_id,
+      description: `You lost 10 points for surrender a challenge from ${data.challenger_user.username}`,
+      points: -10,
+    },
+  });
+
   return NextResponse.json("ok");
 }
