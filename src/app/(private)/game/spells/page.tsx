@@ -19,12 +19,14 @@ import { SelectSpells } from "@/components/common/SelectSpells";
 import { useCreateGame } from "@/app/actions/game-actions";
 import { useFinishChallenge } from "@/app/actions/challenge-actions";
 import { FinishGameDialog } from "@/components/common/FinishGameDialog";
+import { motion, AnimatePresence } from "framer-motion";
 
 const spells: Spell[] = spellsData;
 
 export default function Spells() {
   const router = useRouter();
 
+  const [guesses, setGuesses] = useState<string[]>([]);
   const { mutateAsync: create, isPending: isLoadingCreateGame } =
     useCreateGame();
 
@@ -92,6 +94,8 @@ export default function Spells() {
     setAttempts(newAttempts);
     gameContext.incrementAttempts(newAttempts);
 
+    setGuesses((prev) => [...prev, selectedSpellId]);
+
     if (selectedSpellId === randomSpell.id) {
       setGameIsFinished(true);
       gameContext.setGame3Spell(randomSpell);
@@ -151,30 +155,76 @@ export default function Spells() {
       </p>
 
       {randomSpell && (
-        <div className="border border-gray-300 bg-background p-4 rounded-md shadow-md text-center italic text-lg mx-auto max-w-lg">
+        <motion.div
+          key={randomSpell.description}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="border border-gray-300 bg-background p-4 rounded-md shadow-md text-center italic text-lg mx-auto max-w-lg"
+        >
           "{randomSpell.description}"
-        </div>
+        </motion.div>
       )}
 
       {errorMessage && (
-        <p className="text-center text-red-500 font-medium mb-4 mt-5">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center text-red-500 font-medium mb-4 mt-5"
+        >
           {errorMessage}
-        </p>
+        </motion.p>
       )}
 
+      <AnimatePresence>
+        {guesses.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6 flex flex-wrap justify-center gap-3"
+          >
+            {guesses.map((guessId, index) => {
+              const spell = spells.find((s) => s.id === guessId);
+              const isCorrect = guessId === randomSpell?.id;
+
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className={`px-4 py-2 rounded-md shadow-md text-white font-medium ${
+                    isCorrect ? "bg-green-600" : "bg-red-500"
+                  }`}
+                >
+                  {spell?.name}
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {gameIsFinished && (
-        <div className="flex flex-col justify-center items-center mt-8 w-full mb-5">
-          <h1 className="text-green-600 text-center font-bold">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col justify-center items-center mt-8 w-full mb-5"
+        >
+          <h1 className="text-green-600 text-center font-bold text-xl">
             {randomSpell?.name}
           </h1>
           <p className="text-green-600 text-center mb-4">
             Congratulations, you got it right wizard!
           </p>
-          <Button className="mt-5" onClick={() => handleFinishGame()}>
+          <Button className="mt-5" onClick={handleFinishGame}>
             <Flag className="mr-2" />
             Finish Game
           </Button>
-        </div>
+        </motion.div>
       )}
 
       <div
@@ -205,7 +255,7 @@ export default function Spells() {
             <Button
               disabled={isLoadingCreateGame || isPendingFinish}
               loading={isLoadingCreateGame || isPendingFinish}
-              onClick={() => handleFinishGame()}
+              onClick={handleFinishGame}
             >
               <Flag />
               Finish Game

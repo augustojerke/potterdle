@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ButtonChallange } from "./ButtonChallenge";
-import { DeleteGameButton } from "./DeleteGameButton";
 import { useGames } from "@/app/actions/game-actions";
 import { LoadingSpinner } from "./LoadingSpinner";
 
@@ -81,7 +80,6 @@ export function GamesList() {
                 <TableCell>{getSpellName(game.game_3_spell_id)}</TableCell>
                 <TableCell>{game.attempts}</TableCell>
                 <TableCell className="text-right">
-                  <DeleteGameButton id={game.id} />
                   <ButtonChallange game={game} />
                 </TableCell>
               </TableRow>

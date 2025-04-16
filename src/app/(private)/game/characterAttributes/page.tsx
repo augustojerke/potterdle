@@ -108,6 +108,7 @@ export default function CharacterAttributes() {
         setIsDialogOpen(true);
       }
     }
+    console.log(attempts);
   };
 
   if (!componentMouted)

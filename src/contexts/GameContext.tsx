@@ -30,8 +30,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [gameChallenge, setGameChallenge] = useState<Challenge | null>(null);
 
   const incrementAttempts = (value: number) => {
-    setAttempts((prev) => prev + value);
-    console.log(attempts);
+    setAttempts(value);
   };
 
   const resetGame = () => {

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useGame } from "@/contexts/GameContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -50,6 +51,8 @@ export default function CharacterImage() {
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const [guessedCharacters, setGuessedCharacters] = useState<Character[]>([]);
+
   useEffect(() => {
     console.log(localStorage.getItem("gameIsFinished"));
     if (typeof window !== "undefined") {
@@ -96,6 +99,13 @@ export default function CharacterImage() {
     );
 
     if (guessedCharacter) {
+      const alreadyGuessed = guessedCharacters.some(
+        (c) => c.id === guessedCharacter.id
+      );
+      if (!alreadyGuessed) {
+        setGuessedCharacters((prev) => [...prev, guessedCharacter]);
+      }
+
       if (guessedCharacter.id === randomCharacter.id) {
         setGameIsFinished(true);
         setErrorMessage("");
@@ -145,7 +155,7 @@ export default function CharacterImage() {
             src={randomCharacter.image}
             alt={randomCharacter.name}
             style={{ filter: `blur(${blurValue}px)` }}
-            className="w-40 h-40 rounded-full object-cover"
+            className="w-40 h-40 rounded-full object-cover transition-all duration-500"
           />
         </div>
       )}
@@ -183,6 +193,34 @@ export default function CharacterImage() {
           Guess
         </Button>
       </div>
+
+      {guessedCharacters.length > 0 && (
+        <div className="mt-10 px-4">
+          <h2 className="text-xl font-bold mb-4 text-center text-muted-foreground">
+            Characters You Guessed
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {guessedCharacters.map((character, index) => (
+              <motion.div
+                key={character.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-card p-3 rounded-lg shadow-md flex flex-col items-center"
+              >
+                <img
+                  src={character.image}
+                  alt={character.name}
+                  className="w-20 h-20 rounded-full object-cover mb-2"
+                />
+                <p className="text-sm font-medium text-center">
+                  {character.name}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full max-w-3xl">

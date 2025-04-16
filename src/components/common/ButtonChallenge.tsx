@@ -27,7 +27,7 @@ export function ButtonChallange({ game }: ButtonChallangeProps) {
   const [open, setOpen] = useState(false);
   const [userSelected, setSelectedUser] = useState("");
   const [disableButton, setDisableButton] = useState(true);
-  const { mutateAsync: create } = useCreateChallenge();
+  const { mutateAsync: create, isPending } = useCreateChallenge();
 
   useEffect(() => {
     if (userSelected == "") {
@@ -137,7 +137,11 @@ export function ButtonChallange({ game }: ButtonChallangeProps) {
           <Button variant="secondary" onClick={() => setOpen(false)}>
             Close
           </Button>
-          <Button onClick={() => handleChallenge()} disabled={disableButton}>
+          <Button
+            loading={isPending}
+            onClick={() => handleChallenge()}
+            disabled={disableButton}
+          >
             <Swords />
             Challenge
           </Button>

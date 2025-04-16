@@ -17,7 +17,7 @@ export default function Page() {
         <LoadingSpinner color="text-white" />
       </div>
     );
-  if (error || !user) return <div>Erro ao carregar dados do usuário</div>;
+  if (error || !user) return <div>Error to loading user data</div>;
 
   return (
     <div>

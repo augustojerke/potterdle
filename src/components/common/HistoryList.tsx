@@ -29,10 +29,23 @@ export function HistoryList(props: HistoryListProps) {
         </TableHeader>
         <TableBody>
           {props.history.map((history) => {
+            const isPositive = history.points >= 0;
+
             return (
-              <TableRow key={history.id}>
-                <TableCell className="flex gap-1">{history.points}</TableCell>
-                <TableCell>{history.description}</TableCell>
+              <TableRow
+                key={history.id}
+                className={isPositive ? "bg-green-100" : "bg-red-100"}
+              >
+                <TableCell className="flex gap-1 font-semibold">
+                  {isPositive ? (
+                    <span className="text-green-600">+{history.points}</span>
+                  ) : (
+                    <span className="text-red-600">{history.points}</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-black">
+                  {history.description}
+                </TableCell>
               </TableRow>
             );
           })}

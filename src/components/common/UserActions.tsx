@@ -11,7 +11,7 @@ import { useUser } from "@/app/actions/user-actions";
 export function UserActions() {
   const { data: user, isLoading, error } = useUser();
   const router = useRouter();
-  const { resetGame } = useGame();
+  const { resetGame, gameChallenge } = useGame();
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   function handleSignOut() {
@@ -36,7 +36,7 @@ export function UserActions() {
         className="w-50 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border-ring border-2"
       >
         <Play size={20} />
-        Play
+        {gameChallenge ? <span>Return to Challenge</span> : <span>Play</span>}
       </Button>
       <Button className="w-50 flex items-center gap-2 px-4 py-2 border-ring border-2">
         <Star fill="#facc15" size={20} />
