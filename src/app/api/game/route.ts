@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       game_3_spell_id: data.game_3_spell_id,
       attempts: data.attempts,
       userId: session?.user.id,
+      created_date: new Date(),
     },
   });
 

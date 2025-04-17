@@ -92,7 +92,7 @@ export default function Spells() {
 
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
-    gameContext.incrementAttempts(newAttempts);
+    gameContext.incrementAttempts(1);
 
     setGuesses((prev) => [...prev, selectedSpellId]);
 

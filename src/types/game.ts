@@ -5,4 +5,5 @@ export type Game = {
   game_3_spell_id: string;
   attempts: number;
   userId: string | null;
+  created_date: Date | null;
 };

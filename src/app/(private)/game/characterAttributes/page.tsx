@@ -85,7 +85,7 @@ export default function CharacterAttributes() {
   const handleGuess = () => {
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
-    incrementAttempts(newAttempts);
+    incrementAttempts(1);
 
     if (!selectedCharacterId || !randomCharacter) return;
 
@@ -108,7 +108,6 @@ export default function CharacterAttributes() {
         setIsDialogOpen(true);
       }
     }
-    console.log(attempts);
   };
 
   if (!componentMouted)

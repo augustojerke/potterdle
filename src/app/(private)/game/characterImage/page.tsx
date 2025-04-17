@@ -90,7 +90,7 @@ export default function CharacterImage() {
   function handleGuess() {
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
-    incrementAttempts(newAttempts);
+    incrementAttempts(1);
 
     if (!selectedCharacterId || !randomCharacter) return;
 

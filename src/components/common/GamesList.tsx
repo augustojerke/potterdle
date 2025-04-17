@@ -47,6 +47,7 @@ export function GamesList() {
             <TableHead>Game 2 Character</TableHead>
             <TableHead>Game 3 Spell</TableHead>
             <TableHead>Attempts</TableHead>
+            <TableHead>Date Played</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -79,6 +80,12 @@ export function GamesList() {
                 </TableCell>
                 <TableCell>{getSpellName(game.game_3_spell_id)}</TableCell>
                 <TableCell>{game.attempts}</TableCell>
+                <TableCell>
+                  {game.created_date
+                    ? new Date(game.created_date).toLocaleDateString("pt-BR")
+                    : "—"}
+                </TableCell>
+
                 <TableCell className="text-right">
                   <ButtonChallange game={game} />
                 </TableCell>
