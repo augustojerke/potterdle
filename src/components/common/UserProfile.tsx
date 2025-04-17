@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 interface UserProfileProps {
   username: string | undefined;
@@ -7,6 +10,8 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ username, house, points }: UserProfileProps) {
+  const { data: session } = useSession();
+
   let houseColor = "";
   switch (house.toLowerCase()) {
     case "gryffindor":
@@ -47,14 +52,16 @@ export function UserProfile({ username, house, points }: UserProfileProps) {
     rankColor = "bg-gray-500 text-white";
   }
 
+  const profileImage = session?.user?.image ?? "/harryUser.png";
+
   return (
     <div className="p-5 border rounded-lg shadow-md flex flex-col items-center text-center">
       <Image
-        src="/harryUser.png"
+        src={profileImage}
         alt="user"
         width={100}
         height={100}
-        className="mb-4"
+        className="mb-4 rounded-full object-cover"
       />
       <p className="font-bold">{username}</p>
       <div className="flex justify-center items-center gap-5">

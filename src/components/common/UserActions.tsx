@@ -7,16 +7,21 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { EditProfileDialog } from "./EditProfileDialog";
 import { useUser } from "@/app/actions/user-actions";
+import { useSurrenderChallenge } from "@/app/actions/challenge-actions";
 
 export function UserActions() {
-  const { data: user, isLoading, error } = useUser();
+  const { data: user } = useUser();
   const router = useRouter();
   const { resetGame, gameChallenge } = useGame();
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const { mutateAsync: surrender } = useSurrenderChallenge();
 
-  function handleSignOut() {
+  async function handleSignOut() {
     if (typeof window !== "undefined") {
       localStorage.clear();
+    }
+    if (gameChallenge) {
+      await surrender(gameChallenge);
     }
     signOut({ callbackUrl: "/login" });
   }

@@ -58,41 +58,44 @@ export function CompletedChallengesList(props: CompleteChallengeListProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {props.challenges.map((challenge: Challenge) => {
-            const user = challenge.challenger_user;
-            const houseColor = getHouseColor(user.house);
-            const { rank, color: rankColor } = getRank(user.points);
+          {props.challenges
+            .slice()
+            .reverse()
+            .map((challenge: Challenge) => {
+              const user = challenge.challenger_user;
+              const houseColor = getHouseColor(user.house);
+              const { rank, color: rankColor } = getRank(user.points);
 
-            return (
-              <TableRow key={challenge.id}>
-                <TableCell className="flex gap-1">
-                  <span className="font-semibold mt-1 mr-5">
-                    {user.username}
-                  </span>
-                  <span
-                    className={clsx(
-                      "px-4 py-1 mt-1 rounded-full text-xs font-semibold w-fit",
-                      houseColor
-                    )}
-                  >
-                    {user.house}
-                  </span>
-                  <span
-                    className={clsx(
-                      "px-4 py-1 mt-1 rounded-full text-xs font-semibold w-fit",
-                      rankColor
-                    )}
-                  >
-                    {rank} ({user.points} pts)
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <GameStatus winner_id={challenge.winner_user_id} />
-                </TableCell>
-                <TableCell className="text-right space-x-2"></TableCell>
-              </TableRow>
-            );
-          })}
+              return (
+                <TableRow key={challenge.id}>
+                  <TableCell className="flex gap-1">
+                    <span className="font-semibold mt-1 mr-5">
+                      {user.username}
+                    </span>
+                    <span
+                      className={clsx(
+                        "px-4 py-1 mt-1 rounded-full text-xs font-semibold w-fit",
+                        houseColor
+                      )}
+                    >
+                      {user.house}
+                    </span>
+                    <span
+                      className={clsx(
+                        "px-4 py-1 mt-1 rounded-full text-xs font-semibold w-fit",
+                        rankColor
+                      )}
+                    >
+                      {rank} ({user.points} pts)
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <GameStatus winner_id={challenge.winner_user_id} />
+                  </TableCell>
+                  <TableCell className="text-right space-x-2"></TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </div>
