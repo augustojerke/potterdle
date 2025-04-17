@@ -39,6 +39,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address."),
   password: z.string().min(6, "Password must be at least 6 characters."),
   house: z.enum(["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]),
+  points: z.number().default(0),
 });
 
 export function RegisterForm({ ...props }) {
@@ -50,6 +51,7 @@ export function RegisterForm({ ...props }) {
       email: "",
       password: "",
       house: undefined,
+      points: 0,
     },
   });
 
