@@ -35,9 +35,6 @@ export function UserActions() {
   }
 
   function handleRanking() {
-    if (typeof window !== "undefined") {
-      localStorage.clear();
-    }
     router.push("/ranking");
   }
 
