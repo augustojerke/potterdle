@@ -34,6 +34,10 @@ export function UserActions() {
     router.push("/game/characterAttributes");
   }
 
+  function handleRanking() {
+    router.push("/ranking");
+  }
+
   return (
     <div className="flex flex-col items-center justify-center py-2 gap-4">
       <Button
@@ -43,7 +47,10 @@ export function UserActions() {
         <Play size={20} />
         {gameChallenge ? <span>Return to Challenge</span> : <span>Play</span>}
       </Button>
-      <Button className="w-50 flex items-center gap-2 px-4 py-2 border-ring border-2">
+      <Button
+        className="w-50 flex items-center gap-2 px-4 py-2 border-ring border-2"
+        onClick={() => handleRanking()}
+      >
         <Star fill="#facc15" size={20} />
         Ranking
       </Button>
