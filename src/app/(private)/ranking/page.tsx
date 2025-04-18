@@ -19,7 +19,7 @@ export default function Ranking() {
   }
 
   if (error || !data)
-    return <div className="text-center mt-10">Erro to loading Ranking</div>;
+    return <div className="text-center mt-10">Error to loading Ranking</div>;
 
   return (
     <div className="p-5 flex flex-col items-center gap-10">
