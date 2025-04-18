@@ -80,3 +80,27 @@ async function getUser() {
     throw e;
   }
 }
+
+export function useUserRanking() {
+  return useQuery({
+    queryKey: ["userRanking"],
+    queryFn: getUserRanking,
+    refetchOnWindowFocus: false,
+  });
+}
+
+async function getUserRanking() {
+  try {
+    const res = await fetch("/api/user/ranking", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+
+    return data?.users || [];
+  } catch (e: any) {
+    console.log("Erro ao buscar ranking de usuários:", e.message);
+    throw e;
+  }
+}
