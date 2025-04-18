@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
 
-export default function Page() {
+export default function Ranking() {
   const { data: session } = useSession();
   const { data, isLoading, error } = useUserRanking();
 
@@ -19,16 +19,16 @@ export default function Page() {
   }
 
   if (error || !data)
-    return <div className="text-center mt-10">Erro ao carregar ranking.</div>;
+    return <div className="text-center mt-10">Erro to loading Ranking</div>;
 
   return (
     <div className="p-5 flex flex-col items-center gap-10">
       <div className="text-center">
         <h1 className="text-4xl font-bold flex items-center justify-center gap-2 text-gray-900 dark:text-white">
-          <Crown className="text-yellow-500 w-8 h-8" /> Ranking de Jogadores
+          <Crown className="text-yellow-500 w-8 h-8" /> Players Ranking
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Confira os jogadores com mais pontos!
+          Check out the players with the most points!
         </p>
       </div>
 
@@ -37,7 +37,7 @@ export default function Page() {
 
         {data.length === 0 ? (
           <p className="text-center text-gray-500 dark:text-gray-400">
-            Nenhum usuário disponível para ranqueamento.
+            No users available for ranking.
           </p>
         ) : (
           <div className="space-y-4">
