@@ -19,5 +19,6 @@ export function useHistory() {
     queryKey: ["history"],
     queryFn: getHistory,
     refetchOnWindowFocus: false,
+    refetchInterval: 10000,
   });
 }
