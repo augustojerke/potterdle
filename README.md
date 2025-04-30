@@ -8,10 +8,9 @@
 
 ## ✨ Principais Funcionalidades
 
-- Desafios diários com personagens, feitiços e locais do universo Harry Potter.
-- Interface responsiva e amigável para dispositivos móveis e desktop.
+- Desafios com personagens, feitiços e locais do universo Harry Potter.
+- Interface responsiva e amigável para dispositivos desktop.
 - Suporte a modo claro e escuro para melhor experiência visual.
-- Feedback visual para respostas corretas e incorretas.
 - Sistema de ranking para competir com outros jogadores.
 
 ---
@@ -60,8 +59,6 @@ Abra [http://localhost:3000](http://localhost:3000) para visualizar o jogo em ex
 
 - `app/` – Componentes e páginas principais do aplicativo.
 - `public/` – Arquivos estáticos como imagens e ícones.
-- `styles/` – Estilização global e configurações do Tailwind.
-- `utils/` – Funções utilitárias auxiliares.
 
 ---
 
