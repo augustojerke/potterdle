@@ -58,7 +58,7 @@ export function RegisterForm({ ...props }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const user = await createUser(values);
     if (!user.success) {
-      // error
+      alert(user.message);
     } else {
       window.location.href = "/login";
     }
